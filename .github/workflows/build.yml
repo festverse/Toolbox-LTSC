@@ -26,18 +26,18 @@ jobs:
       run: dotnet restore AtlasToolbox\AtlasToolbox.csproj
 
     - name: Build and Publish Application
-      run: dotnet publish AtlasToolbox\AtlasToolbox.csproj -c Release -p:Platform=x64 -r win-x64 --self-contained true -o "${{ github.workspace }}\Deploy\src\"
+      run: dotnet publish AtlasToolbox\AtlasToolbox.csproj -c Release -p:Platform=x64 -r win-x64 --self-contained true -o Deploy\src
 
     - name: Compile .ISS to .EXE Installer
       uses: robin24/inno-setup-action@v1
       with:
-        filepath: "${{ github.workspace }}\Installer\setup.iss"
+        filepath: Installer\setup.iss
 
     - name: Create ZIP of MSI
-      run: powershell Compress-Archive -Path "${{ github.workspace }}\Installer\Output\*" -DestinationPath "${{ github.workspace }}\AtlasToolbox-Installer.zip"
+      run: powershell Compress-Archive -Path "Installer\Output\*" -DestinationPath "AtlasToolbox-Installer.zip"
 
     - name: Upload Build Artifacts
       uses: actions/upload-artifact@v4
       with:
         name: AtlasToolbox-Installer
-        path: "${{ github.workspace }}\AtlasToolbox-Installer.zip"
+        path: AtlasToolbox-Installer.zip
