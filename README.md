@@ -26,15 +26,7 @@ You'll still see toggles for Windows 11-exclusive features like **Copilot, Recal
 > 
 > That being said, we are all human! If you find a glaring issue or bug specifically related to this fork, feel free to open an issue on this repository and I'll take a look whenever I have some free time.
 
-## Building from Source
-If you want to compile this yourself, you'll need the **.NET 8 SDK** installed.
+## Installation
+You don't need to compile this from scratch! Just head over to the **Releases** tab on this GitHub page and download the latest version. 
 
-Open a terminal in the project directory and run:
-```powershell
-# Restore dependencies
-dotnet restore
-
-# Build a self-contained executable for Windows x64
-dotnet publish AtlasToolbox\AtlasToolbox.csproj -c Release -p:Platform=x64 -r win-x64 --self-contained true -o .\publish
-```
-Your ready-to-use `.exe` will be waiting for you in the `publish` folder. Enjoy!
+It is a portable application, so all you have to do is download it, extract the folder, and run the executable as an administrator.
