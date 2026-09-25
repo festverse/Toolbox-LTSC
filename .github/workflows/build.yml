@@ -22,31 +22,22 @@ jobs:
       with:
         dotnet-version: '8.0.x'
 
-    - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v1
-
     - name: Restore Dependencies
-      run: msbuild AtlasToolbox-WinUI3.sln /t:restore /p:Platform="x64"
+      run: dotnet restore AtlasToolbox\AtlasToolbox.csproj
 
-    - name: Build Solution
-      run: msbuild AtlasToolbox-WinUI3.sln /p:Configuration=Release /p:Platform="x64"
-
-    - name: Publish Application
-      run: msbuild AtlasToolbox-WinUI3.sln /t:Publish /p:Configuration=Release /p:Platform="x64" /p:PublishDir="D:\a\atlas-toolbox\atlas-toolbox\Deploy\src\"
-
-    # - name: Build IsWiX Installer
-    #   run: dotnet build D:\a\atlas-toolbox\atlas-toolbox\Installer\ToolboxPackaging.wixproj --configuration Release -p:DefineConstants="MSIProductVersion=1.0.0" --output "D:\a\atlas-toolbox\atlas-toolbox\artifacts\"
+    - name: Build and Publish Application
+      run: dotnet publish AtlasToolbox\AtlasToolbox.csproj -c Release -p:Platform=x64 -r win-x64 --self-contained true -o "${{ github.workspace }}\Deploy\src\"
 
     - name: Compile .ISS to .EXE Installer
       uses: robin24/inno-setup-action@v1
       with:
-        filepath: D:\a\atlas-toolbox\atlas-toolbox\Installer\setup.iss
+        filepath: "${{ github.workspace }}\Installer\setup.iss"
 
     - name: Create ZIP of MSI
-      run: powershell Compress-Archive -Path "D:\a\atlas-toolbox\atlas-toolbox\Installer\Output\*" -DestinationPath "D:\a\atlas-toolbox\atlas-toolbox\AtlasToolbox.zip"
+      run: powershell Compress-Archive -Path "${{ github.workspace }}\Installer\Output\*" -DestinationPath "${{ github.workspace }}\AtlasToolbox-Installer.zip"
 
     - name: Upload Build Artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: AtlasToolbox
-        path: D:\a\atlas-toolbox\atlas-toolbox\AtlasToolbox.zip
+        name: AtlasToolbox-Installer
+        path: "${{ github.workspace }}\AtlasToolbox-Installer.zip"
