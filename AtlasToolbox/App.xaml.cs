@@ -1,4 +1,4 @@
-﻿using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml;
 using AtlasToolbox.HostBuilder;
 using Microsoft.Extensions.Hosting;
 using AtlasToolbox.ViewModels;
@@ -98,7 +98,9 @@ namespace AtlasToolbox
                 DebugSettings.BindingFailed += DebugSettings_BindingFailed;
             }
 #endif
-            Version = RegistryHelper.GetValue($@"HKLM\SOFTWARE\AtlasOS\Toolbox", "Channel") + " v" + RegistryHelper.GetValue($@"HKLM\SOFTWARE\AtlasOS\Toolbox", "Version");
+            var channel = RegistryHelper.GetValue($@"HKLM\SOFTWARE\AtlasOS\Toolbox", "Channel") as string;
+            var ver = RegistryHelper.GetValue($@"HKLM\SOFTWARE\AtlasOS\Toolbox", "Version") as string;
+            Version = (!string.IsNullOrEmpty(channel) ? channel : "Release") + " v" + (!string.IsNullOrEmpty(ver) ? ver : "0.4.1");
             if (CompatibilityHelper.IsCompatible())
             {
                 Task.Run(() => StartNamedPipeServer());

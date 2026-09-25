@@ -1,4 +1,4 @@
-﻿using AtlasToolbox.Stores;
+using AtlasToolbox.Stores;
 using AtlasToolbox.Utils;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -123,7 +123,9 @@ namespace AtlasToolbox.Services.ConfigurationServices
         public bool IsEnabled()
         {
             OperatingSystem os = Environment.OSVersion;
-            if (os.Version.ToString() == "10.0.19045.0")
+            // Windows 10 (builds < 22000) uses TabletInputService
+            // Windows 11 (builds >= 22000) uses TextInputManagementService
+            if (os.Version.Build < 22000)
             {
                 bool[] checks =
                 {
